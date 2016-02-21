@@ -48,12 +48,12 @@ int main(int argc, char *argv[])
     addr.sin_family = AF_INET;
     addr.sin_port = htons(12345);
     addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    bind(sd, (struct sickaddr *)&addr, sizeof(addr));
+    bind(sd, (struct sockaddr *)&addr, sizeof(addr));
 
     listen(sd, SOMAXCONN);
     struct ev_io w_accept;
-    ev_io_init(&w_accept, accept_cd, sd, EV_READ);
-    ev_io_sturt(loop, &w_accept);
+    ev_io_init(&w_accept, accept_cb, sd, EV_READ);
+    ev_io_start(loop, &w_accept);
 
     while(1)
         ev_loop(loop, 0);
