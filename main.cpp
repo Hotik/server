@@ -8,8 +8,40 @@
 #include <stdio.h>
 #include <ev.h>
 #include <cstdlib>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 using namespace std;
+
+bool daemonize(void)
+{
+	pid_t pid;
+
+	if ((pid = fork()) < 0)
+		return false;
+	if (pid != 0)
+		_exit(0);
+
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
+
+
+	if (open("/dev/null", O_WRONLY) != 0)
+		return false;
+	if (dup2(0, STDERR_FILENO) != STDERR_FILENO)
+		return false;
+	close(0);
+
+	if (setsid() == (pid_t)-1)
+	        return false;
+	if (chdir("/") != 0)
+		return false;
+
+	umask(0);
+	return true;
+}
 
 void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 {
@@ -42,6 +74,8 @@ void accept_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 
 int main(int argc, char *argv[])
 {
+    if (!deamonize())
+        cout << "failed become deamon";
     struct ev_loop *loop = ev_default_loop(0);
     int sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     struct sockaddr_in addr;
@@ -57,6 +91,7 @@ int main(int argc, char *argv[])
 
     while(1)
         ev_loop(loop, 0);
-
+    
+    sleep(60);
     return 0;
 }
