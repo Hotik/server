@@ -74,7 +74,7 @@ void accept_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 
 int main(int argc, char *argv[])
 {
-    if (!deamonize())
+    if (!daemonize())
         cout << "failed become deamon";
     struct ev_loop *loop = ev_default_loop(0);
     int sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
