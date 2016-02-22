@@ -139,7 +139,7 @@ void get_params(int argc, char **argv, char *addr, int *port, string *dir)
 
 int main(int argc, char *argv[])
 {
-    char* adr;
+    char* adr = '\0';
     int port;
     string dir;
     /*if (!daemonize())
