@@ -28,7 +28,7 @@ static const char* templ = "HTTP/1.0 200 OK\r\n"
 
 		       	   "\r\n"
 
-		       	   "%s";
+		       	   "data";
 		       	   
  static const char not_found[] = "HTTP/1.0 404 NOT FOUND\r\nContent-Type: text/html\r\n\r\n";
 
@@ -96,7 +96,7 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 		
 //	} else cout << "parsing error";
     //	printf("%s", buffer);
-    	send(watcher->fd, not_found, sizeof(not_found), MSG_NOSIGNAL);
+    	send(watcher->fd, templ, strlen(templ), MSG_NOSIGNAL);
     //   send(watcher->fd, buffer, r, MSG_NOSIGNAL);
 
     }
