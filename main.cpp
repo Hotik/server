@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     char* adr = NULL;
     int port;
     string dir;
-    /*if (!daemonize())
+    if (!daemonize())
         cout << "failed become daemon";*/
     get_params(argc, argv, &adr, &port, &dir);
     cout << adr;
