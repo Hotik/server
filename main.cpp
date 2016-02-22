@@ -13,6 +13,8 @@
 #include <sys/stat.h>
 #include <getopt.h>
 #include "http_parser.h"
+#include <netio.h>
+
 
 using namespace std;
 
