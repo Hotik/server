@@ -64,7 +64,7 @@ int main(int argc, const char** argv) {
 
 void tcp_new_connection_cb(uv_stream_t* server, int status) {
     /* initialize a new http http_request struct */
-    http_request_t* http_request = malloc(sizeof(http_request_t));
+    http_request_t* http_request = (http_request_t*)malloc(sizeof(http_request_t));
 
     if (status == -1) {
         fprintf(stderr, "Error on connection: %s.\n",
@@ -92,7 +92,7 @@ void tcp_new_connection_cb(uv_stream_t* server, int status) {
 
 void tcp_read_cb(uv_stream_t* stream, ssize_t nread, uv_buf_t buf) {
     /* get back our http request*/
-    http_request_t* http_request = stream->data;
+    http_request_t* http_request =  (http_request_t*) stream->data;
 
     /* handle error */
     if (nread == -1) {
@@ -128,7 +128,7 @@ void tcp_write_cb(uv_write_t* req, int status) {
  * Initializes default values, counters.
  */
 int http_message_begin_cb(http_parser* parser) {
-    http_request_t* http_request = parser->data;
+    http_request_t* http_request =  (http_request_t*)parser->data;
 
     http_request->header_lines = 0;
 
@@ -139,9 +139,9 @@ int http_message_begin_cb(http_parser* parser) {
  * Copies url string to http_request->url.
  */
 int http_url_cb(http_parser* parser, const char* chunk, size_t len) {
-    http_request_t* http_request = parser->data;
+    http_request_t* http_request = (http_request_t*) parser->data;
     
-    http_request->url = malloc(len+1);
+    http_request->url =(char*) malloc(len+1);
 
     strncpy((char*) http_request->url, chunk, len);
 
@@ -152,11 +152,11 @@ int http_url_cb(http_parser* parser, const char* chunk, size_t len) {
  * Copy the header field name to the current header item.
  */
 int http_header_field_cb(http_parser* parser, const char* chunk, size_t len) {
-    http_request_t* http_request = parser->data;
+    http_request_t* http_request =  (http_request_t*) parser->data;
 
     http_header_t* header = &http_request->headers[http_request->header_lines];
 
-    header->field = malloc(len+1);
+    header->field =(char*) malloc(len+1);
     header->field_length = len;
 
     strncpy((char*) header->field, chunk, len);
@@ -168,12 +168,12 @@ int http_header_field_cb(http_parser* parser, const char* chunk, size_t len) {
  * Now copy its assigned value.
  */
 int http_header_value_cb(http_parser* parser, const char* chunk, size_t len) {
-    http_request_t* http_request = parser->data;
+    http_request_t* http_request =  (http_request_t*)parser->data;
 
     http_header_t* header = &http_request->headers[http_request->header_lines];
 
     header->value_length = len;
-    header->value = malloc(len+1);
+    header->value =(char*) malloc(len+1);
 
     strncpy((char*) header->value, chunk, len);
     
@@ -186,7 +186,7 @@ int http_header_value_cb(http_parser* parser, const char* chunk, size_t len) {
  * Extract the method name.
  */
 int http_headers_complete_cb(http_parser* parser) {
-    http_request_t* http_request = parser->data;
+    http_request_t* http_request =  (http_request_t*) parser->data;
 
     const char* method = http_method_str(parser->method);
 
@@ -200,9 +200,9 @@ int http_headers_complete_cb(http_parser* parser) {
  * And copy the body content.
  */
 int http_body_cb(http_parser* parser, const char* chunk, size_t len) {
-    http_request_t* http_request = parser->data;
+    http_request_t* http_request =  (http_request_t*)parser->data;
 
-    http_request->body = malloc(len+1);
+    http_request->body =(char*) malloc(len+1);
     http_request->body = chunk;
 
     return 0;
