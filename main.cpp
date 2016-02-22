@@ -139,10 +139,10 @@ int main(int argc, char *argv[])
     int adr;
     int port;
     string dir;
-    get_params(argc, argv, &adr, &port, &dir);
     if (!daemonize())
         cout << "failed become daemon";
-        
+    get_params(argc, argv, &adr, &port, &dir);
+    cout << adr;
         
     struct ev_loop *loop = ev_default_loop(0);
     int sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
