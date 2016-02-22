@@ -13,6 +13,7 @@
 #include <sys/stat.h>
 #include <getopt.h>
 #include "http_parser.h"
+#include <arpa/inet.h>
 
 
 using namespace std;
@@ -151,7 +152,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
-    net_aton(adr, &addr.sin_addr.s_addr);
+    inet_aton(adr, &addr.sin_addr.s_addr);
     //addr.sin_addr.s_addr = htonl(adr);
     bind(sd, (struct sockaddr *)&addr, sizeof(addr));
 
