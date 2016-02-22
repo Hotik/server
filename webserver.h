@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "uv.h"
+#include <uv.h>
 #include "http_parser.h"
 
 #define RESPONSE \
