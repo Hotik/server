@@ -12,8 +12,24 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <getopt.h>
+#include "http_parser.h"
 
 using namespace std;
+
+static const char* templ = "HTTP/1.0 200 OK\r\n"
+
+		           "Content-length: %d\r\n"
+
+		       	   "Connection: close\r\n"
+
+		       	   "Content-Type: text/html\r\n"
+
+		       	   "\r\n"
+
+		       	   "%s";
+		       	   
+ static const char not_found[] = "HTTP/1.0 404 NOT FOUND\r\nContent-Type: text/html\r\n\r\n";
+
 
 bool daemonize(void)
 {
@@ -44,9 +60,23 @@ bool daemonize(void)
 	return true;
 }
 
+http_parser *parser;
+static http_parser_settings settings;
+
+int my_url_callback(http_parser* parser, const char *at, size_t length) {
+  /* access to thread local custom_data_t struct.
+  Use this access save parsed data for later use into thread local
+  buffer, or communicate over socket
+  */
+  parser->data;
+  ...
+  return 0;
+}
+
 void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 {
     char buffer[1024];
+    size_t nparsed;
     ssize_t r = recv(watcher->fd, buffer, 1024, MSG_NOSIGNAL);
     if (r < 0)
         return;
@@ -58,6 +88,13 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
     }
     else
     {
+    //	nparsed = http_parser_execute(parser, &settings, buffer, r);
+//	if (parser->upgrade) {
+		
+		
+//	} else cout << "parsing error";
+
+    	cout << buffer;
         send(watcher->fd, buffer, r, MSG_NOSIGNAL);
 
     }
@@ -95,6 +132,8 @@ void get_params(int argc, char **argv, int *addr, int *port, string *dir)
 	}
 }
 
+
+
 int main(int argc, char *argv[])
 {
     int addr;
@@ -113,6 +152,19 @@ int main(int argc, char *argv[])
     bind(sd, (struct sockaddr *)&addr, sizeof(addr));
 
     listen(sd, SOMAXCONN);
+    //settings = 0;
+   // settings.on_url = my_url_callback;
+    //http_request_t* http_request = malloc(sizeof(http_request_t));
+
+  //  settings.on_header_field = my_header_field_callback;
+	/* ... */
+
+//	parser = malloc(sizeof(http_parser));
+//	http_parser_init(parser, HTTP_REQUEST);
+//	 nparsed = http_parser_execute(parser, &settings, buf, recved);
+
+
+ //   parser->data = sd;
     struct ev_io w_accept;
     ev_io_init(&w_accept, accept_cb, sd, EV_READ);
     ev_io_start(loop, &w_accept);
