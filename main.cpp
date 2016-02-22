@@ -12,7 +12,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <getopt.h>
-#include "http_parser.h"
+//#include "http_parser.h"
 #include <arpa/inet.h>
 
 
@@ -62,8 +62,8 @@ bool daemonize(void)
 	return true;
 }
 
-http_parser *parser;
-static http_parser_settings settings;
+/*http_parser *parser;
+static http_parser_settings settings;*/
 
 /*int my_url_callback(http_parser* parser, const char *at, size_t length) {
   /* access to thread local custom_data_t struct.
