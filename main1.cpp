@@ -1,5 +1,9 @@
 #include "webserver.h"
-
+#include <cstdlib>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <getopt.h>
 /**
  * Storage for our buffer with the http response.
  */
@@ -24,12 +28,70 @@ static uv_tcp_t server;
  */
 static http_parser_settings settings;
 
+bool daemonize(void)
+{
+	pid_t pid;
+
+	if ((pid = fork()) < 0)
+		return false;
+	if (pid != 0)
+		_exit(0);
+
+	close(STDIN_FILENO);
+	close(STDOUT_FILENO);
+	close(STDERR_FILENO);
+
+
+	if (open("/dev/null", O_WRONLY) != 0)
+		return false;
+	if (dup2(0, STDERR_FILENO) != STDERR_FILENO)
+		return false;
+	close(0);
+
+	if (setsid() == (pid_t)-1)
+	        return false;
+	if (chdir("/") != 0)
+		return false;
+
+	umask(0);
+	return true;
+}
+
+void get_params(int argc, char **argv, string *addr, int *port, string *dir)
+{
+	int opt;
+	
+	while ((opt = getopt(argc, argv, "h:p:d:")) != -1)
+	{
+		switch (opt) {
+			case 'h':
+				*addr = optarg;
+				break;
+			case 'p':
+				*port = atoi(optarg);
+				break;
+			case 'd':
+				*dir  = optarg;
+				break;
+			default:
+				cout << "Error, wrong args";
+		}
+	}
+}
+
+
 /**
  * Executed when calling from shell.
  */
 int main(int argc, const char** argv) {
     /* transforms an ip4 addr to a libuv usable struct */
-    struct sockaddr_in addr = uv_ip4_addr("127.0.0.1", 3000);
+    string adr;
+    int port;
+    string dir;
+    if (!daemonize())
+        cout << "failed become daemon";
+        
+    struct sockaddr_in addr = uv_ip4_addr(adr, port);
     
     loop = uv_default_loop();
 
