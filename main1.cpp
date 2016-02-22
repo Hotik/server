@@ -190,7 +190,7 @@ int http_headers_complete_cb(http_parser* parser) {
 
     const char* method = http_method_str(parser->method);
 
-    http_request->method = malloc(sizeof(method));
+    http_request->method = (char*) malloc(sizeof(method));
     strncpy(http_request->method, method, strlen(method));
 
     return 0;
@@ -214,7 +214,7 @@ int http_body_cb(http_parser* parser, const char* chunk, size_t len) {
  * In our case just logs the whole request to stdou.
  */
 int http_message_complete_cb(http_parser* parser) {
-    http_request_t* http_request = parser->data;
+    http_request_t* http_request = (http_request_t*)parser->data;
 
     /* now print the ordered http http_request to console */
     printf("url: %s\n", http_request->url);
