@@ -40,9 +40,9 @@ bool daemonize(void)
 	if (pid != 0)
 		_exit(0);
 
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
+	//close(STDIN_FILENO);
+	//close(STDOUT_FILENO);
+	//close(STDERR_FILENO);
 
 
 	if (open("/dev/null", O_WRONLY) != 0)
