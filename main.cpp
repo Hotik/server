@@ -95,9 +95,9 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 		
 		
 //	} else cout << "parsing error";
-    	printf("%s", buffer);
-    //	send(watcher->fd, not_found, sizeof(not_found), MSG_NOSIGNAL);
-       send(watcher->fd, buffer, r, MSG_NOSIGNAL);
+    //	printf("%s", buffer);
+    	send(watcher->fd, not_found, sizeof(not_found), MSG_NOSIGNAL);
+    //   send(watcher->fd, buffer, r, MSG_NOSIGNAL);
 
     }
 }
