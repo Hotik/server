@@ -21,7 +21,7 @@ using namespace std;
 
 static const char* templ = "HTTP/1.0 200 OK\r\n"
 
-		           "Content-length: %d\r\n"
+		           "Content-length: %4\r\n"
 
 		       	   "Connection: close\r\n"
 
