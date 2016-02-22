@@ -188,7 +188,7 @@ int http_header_value_cb(http_parser* parser, const char* chunk, size_t len) {
 int http_headers_complete_cb(http_parser* parser) {
     http_request_t* http_request =  (http_request_t*) parser->data;
 
-    const char* method = http_method_str(parser->method);
+    const char* method = http_method_str((http_method)parser->method);
 
     http_request->method = (char*) malloc(sizeof(method));
     strncpy(http_request->method, method, strlen(method));
