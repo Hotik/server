@@ -111,7 +111,7 @@ void accept_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
     ev_io_start(loop, w_client);
 }
 
-void get_params(int argc, char **argv, int *addr, int *port, string *dir)
+void get_params(int argc, char **argv, string *addr, int *port, string *dir)
 {
 	int opt;
 	
@@ -119,7 +119,7 @@ void get_params(int argc, char **argv, int *addr, int *port, string *dir)
 	{
 		switch (opt) {
 			case 'h':
-				*addr = atoi(optarg);
+				addr = optarg;
 				break;
 			case 'p':
 				*port = atoi(optarg);
@@ -137,7 +137,7 @@ void get_params(int argc, char **argv, int *addr, int *port, string *dir)
 
 int main(int argc, char *argv[])
 {
-    int adr;
+    string adr;
     int port;
     string dir;
     /*if (!daemonize())
@@ -150,7 +150,8 @@ int main(int argc, char *argv[])
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
-    addr.sin_addr.s_addr = htonl(adr);
+    net_aton(adr, 7addr.sin_addr.s_addr);
+    //addr.sin_addr.s_addr = htonl(adr);
     bind(sd, (struct sockaddr *)&addr, sizeof(addr));
 
     listen(sd, SOMAXCONN);
