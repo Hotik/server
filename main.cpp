@@ -11,6 +11,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <getopt.h>
 
 using namespace std;
 
@@ -72,16 +73,43 @@ void accept_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
     ev_io_start(loop, w_client);
 }
 
+void get_params(int argc, char **argv, int *addr, int *port, string *dir)
+{
+	int opt;
+	
+	while ((opt = getopt(argc, argv, "h:p:d:")) != -1)
+	{
+		switch (opt) {
+			case 'h':
+				*addr = atoi(optarg);
+				break;
+			case 'p':
+				*port = atoi(optarg);
+				break;
+			case 'd':
+				dir  = optarg;
+				break;
+			default:
+				cout << "Error, wrong args";
+		}
+	}
+}
+
 int main(int argc, char *argv[])
 {
+    int addr;
+    int port;
+    string dir;
     if (!daemonize())
         cout << "failed become daemon";
+        
+        
     struct ev_loop *loop = ev_default_loop(0);
     int sd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(12345);
-    addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    addr.sin_port = htons(port);
+    addr.sin_addr.s_addr = htonl(addr);
     bind(sd, (struct sockaddr *)&addr, sizeof(addr));
 
     listen(sd, SOMAXCONN);
