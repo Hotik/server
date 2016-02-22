@@ -113,7 +113,7 @@ void accept_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
     ev_io_start(loop, w_client);
 }
 
-void get_params(int argc, char **argv, char **addr, int *port, string *dir)
+void get_params(int argc, char **argv, char *addr, int *port, string *dir)
 {
 	int opt;
 	
@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
     string dir;
     /*if (!daemonize())
         cout << "failed become daemon";*/
-    get_params(argc, argv, &adr, &port, &dir);
+    get_params(argc, argv, adr, &port, &dir);
     cout << adr;
         
     struct ev_loop *loop = ev_default_loop(0);
