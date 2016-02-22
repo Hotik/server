@@ -63,15 +63,15 @@ bool daemonize(void)
 http_parser *parser;
 static http_parser_settings settings;
 
-int my_url_callback(http_parser* parser, const char *at, size_t length) {
+/*int my_url_callback(http_parser* parser, const char *at, size_t length) {
   /* access to thread local custom_data_t struct.
   Use this access save parsed data for later use into thread local
   buffer, or communicate over socket
-  */
+  
   parser->data;
   ...
   return 0;
-}
+}*/
 
 void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 {
@@ -124,7 +124,7 @@ void get_params(int argc, char **argv, int *addr, int *port, string *dir)
 				*port = atoi(optarg);
 				break;
 			case 'd':
-				dir  = optarg;
+				*dir  = optarg;
 				break;
 			default:
 				cout << "Error, wrong args";
@@ -136,7 +136,7 @@ void get_params(int argc, char **argv, int *addr, int *port, string *dir)
 
 int main(int argc, char *argv[])
 {
-    int addr;
+    int adr;
     int port;
     string dir;
     if (!daemonize())
@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
     struct sockaddr_in addr;
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
-    addr.sin_addr.s_addr = htonl(addr);
+    addr.sin_addr.s_addr = htonl(adr);
     bind(sd, (struct sockaddr *)&addr, sizeof(addr));
 
     listen(sd, SOMAXCONN);
