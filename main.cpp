@@ -14,6 +14,7 @@
 #include <getopt.h>
 //#include "http_parser.h"
 #include <arpa/inet.h>
+#include <cstring>
 
 
 using namespace std;
