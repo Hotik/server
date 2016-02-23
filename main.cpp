@@ -81,20 +81,26 @@ char *parse_http(char *str)
 {
 	string res;
 	char *tmp;
+	tmp = strchr(str, ' ');
+	str = tmp + 2;
 	tmp = strchr(str, '?');
-	if (tmp)
-	    *tmp = '\0';
-	tmp = strchr(str, '/');
 	if (tmp) {
-		str = tmp + 1;
-		tmp = strchr(str, '/');
+	    *tmp = '\0';
+	} else {
+		tmp = strchr(str, ' ');
+		*tmp = '\0';
+	}
+	//tmp = strchr(str, '/');
+//	if (tmp) {
+//		str = tmp + 1;
+	/*	tmp = strchr(str, '/');
 		if (tmp) {
 			str = tmp + 1;
 			tmp = strchr(str, '/');
 			if (tmp)
 				str = tmp + 1;
-		}
-	}
+		}*/
+//	}
 	return str;
 }
 
