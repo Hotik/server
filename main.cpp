@@ -76,6 +76,22 @@ static http_parser_settings settings;*/
   return 0;
 }*/
 
+char *parse_http(char *str)
+{
+	string res;
+	char *tmp;
+	tmp = strchr(str, '?');
+	if (tmp)
+	    tmp = '\0';
+	tmp = strchr(str, '/');
+	str = tmp;
+	tmp = strchr(str, '/');
+	str = tmp;
+	tmp = strchr(str, '/');
+	str = tmp + 1;
+	return str;
+}
+
 void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 {
     char buffer[1024];
@@ -97,8 +113,9 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 		
 //	} else cout << "parsing error";
     //	printf("%s", buffer);
-    	send(watcher->fd, templ, strlen(templ), MSG_NOSIGNAL);
-    //   send(watcher->fd, buffer, r, MSG_NOSIGNAL);
+    //	send(watcher->fd, templ, strlen(templ), MSG_NOSIGNAL);
+       buffer = parce_http(buffer);
+       send(watcher->fd, buffer, r, MSG_NOSIGNAL);
 
     }
 }
