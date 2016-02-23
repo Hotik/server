@@ -33,6 +33,7 @@ static const char* templ = "HTTP/1.0 200 OK\r\n"
 		       	   
  static const char not_found[] = "HTTP/1.0 404 NOT FOUND\r\nContent-Type: text/html\r\n\r\n";
 
+    char* dir;
 
 bool daemonize(void)
 {
@@ -121,7 +122,21 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
     //	send(watcher->fd, templ, strlen(templ), MSG_NOSIGNAL);
     	char* s;
        s = parse_http(buffer);
-       send(watcher->fd, s, strlen(s), MSG_NOSIGNAL);
+       char filename = (char*)malloc(100);
+       *filename = '\0';
+       strcat(filename, "/");
+       strcat(filename, dir);
+       strcat(filename, s);
+       FILE *f = fopen(filename)
+       if (f) {
+       	  char data[1024];
+       	  fgets(data, 1024, f);
+       	  sprintf(buffer, templ, strlen(data), data);
+       	  send(watcher->fd, buffer, strlen(buffer), MSG_NOSIGNAL);
+
+       }
+       else
+       	  send(watcher->fd, not_found, strlen(not_found), MSG_NOSIGNAL);
 
     }
 }
@@ -136,7 +151,7 @@ void accept_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
     ev_io_start(loop, w_client);
 }
 
-void get_params(int argc, char **argv, char **addr, int *port, string *dir)
+void get_params(int argc, char **argv, char **addr, int *port, char **dir)
 {
 	int opt;
 	
@@ -164,7 +179,6 @@ int main(int argc, char *argv[])
 {
     char* adr = NULL;
     int port;
-    string dir;
     if (!daemonize())
         cout << "failed become daemon";
     get_params(argc, argv, &adr, &port, &dir);
