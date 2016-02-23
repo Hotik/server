@@ -82,13 +82,18 @@ char *parse_http(char *str)
 	char *tmp;
 	tmp = strchr(str, '?');
 	if (tmp)
-	    tmp = '\0';
+	    *tmp = '\0';
 	tmp = strchr(str, '/');
-	str = tmp;
-	tmp = strchr(str, '/');
-	str = tmp;
-	tmp = strchr(str, '/');
-	str = tmp + 1;
+	if (tmp) {
+		str = tmp + 1;
+		tmp = strchr(str, '/');
+		if (tmp) {
+			str = tmp + 1;
+			tmp = strchr(str, '/');
+			if (tmp)
+				str = tmp + 1;
+		}
+	}
 	return str;
 }
 
