@@ -25,13 +25,13 @@ static const char* templ = "HTTP/1.0 200 OK\r\n"
 		       	   "\r\n"
 		       	   "%s";
 		       	   
- static const char *not_found =// "HTTP/1.0 404 NOT FOUND\r\n"
- 			//	"Connection: close\r\n"
- 			//	"Content-Type: text/html\r\n"
- 			//	"\r\n"
+ static const char *not_found = "HTTP/1.0 404 NOT FOUND\r\n"
+ 				"Connection: close\r\n"
+ 				"Content-Type: text/html\r\n"
+ 				"\r\n"
  				"<html>\n<head>\n<title>Not Found</title>\n</head>\r\n"
  				"<body>\n<p>404 Request file not found.</p>\n</body>\n</html>\r\n";
-;
+
 
     char* dir;
 
@@ -112,7 +112,6 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
        }
        else
        	  send(watcher->fd, not_found, strlen(not_found), MSG_NOSIGNAL);
-
     }
 }
 
