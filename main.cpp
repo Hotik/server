@@ -130,7 +130,7 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
        s = parse_http(buffer);
        char* filename = (char*)malloc(100);
        *filename = '\0';
-       strcat(filename, "/");
+      // strcat(filename, "/");
        strcat(filename, dir);
        strcat(filename, s);
        FILE *f = fopen(filename, "r");
