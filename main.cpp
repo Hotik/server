@@ -127,7 +127,8 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
        strcat(filename, "/");
        strcat(filename, dir);
        strcat(filename, s);
-       FILE *f = fopen(filename, "r")
+       FILE *f = fopen(filename, "r");
+       free(filename);
        if (f) {
        	  char data[1024];
        	  fgets(data, 1024, f);
