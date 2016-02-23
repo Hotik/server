@@ -116,7 +116,7 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
     //	send(watcher->fd, templ, strlen(templ), MSG_NOSIGNAL);
     	string s;
        s = parse_http(buffer);
-       send(watcher->fd, s, s.size(), MSG_NOSIGNAL);
+       send(watcher->fd, (void *)s, s.size(), MSG_NOSIGNAL);
 
     }
 }
