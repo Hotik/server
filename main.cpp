@@ -127,13 +127,12 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
        strcat(filename, "/");
        strcat(filename, dir);
        strcat(filename, s);
-       FILE *f = fopen(filename)
+       FILE *f = fopen(filename, "r")
        if (f) {
        	  char data[1024];
        	  fgets(data, 1024, f);
        	  sprintf(buffer, templ, strlen(data), data);
        	  send(watcher->fd, buffer, strlen(buffer), MSG_NOSIGNAL);
-
        }
        else
        	  send(watcher->fd, not_found, strlen(not_found), MSG_NOSIGNAL);
