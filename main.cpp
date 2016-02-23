@@ -12,7 +12,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <getopt.h>
-//#include "http_parser.h"
 #include <arpa/inet.h>
 #include <cstring>
 
@@ -64,19 +63,6 @@ bool daemonize(void)
 	return true;
 }
 
-/*http_parser *parser;
-static http_parser_settings settings;*/
-
-/*int my_url_callback(http_parser* parser, const char *at, size_t length) {
-  /* access to thread local custom_data_t struct.
-  Use this access save parsed data for later use into thread local
-  buffer, or communicate over socket
-  
-  parser->data;
-  ...
-  return 0;
-}*/
-
 char *parse_http(char *str)
 {
 	string res;
@@ -90,17 +76,6 @@ char *parse_http(char *str)
 		tmp = strchr(str, ' ');
 		*tmp = '\0';
 	}
-	//tmp = strchr(str, '/');
-//	if (tmp) {
-//		str = tmp + 1;
-	/*	tmp = strchr(str, '/');
-		if (tmp) {
-			str = tmp + 1;
-			tmp = strchr(str, '/');
-			if (tmp)
-				str = tmp + 1;
-		}*/
-//	}
 	return str;
 }
 
@@ -119,13 +94,6 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
     }
     else
     {
-    //	nparsed = http_parser_execute(parser, &settings, buffer, r);
-//	if (parser->upgrade) {
-		
-		
-//	} else cout << "parsing error";
-    //	printf("%s", buffer);
-    //	send(watcher->fd, templ, strlen(templ), MSG_NOSIGNAL);
     	char* s;
        s = parse_http(buffer);
        char* filename = (char*)malloc(100);
@@ -196,23 +164,8 @@ int main(int argc, char *argv[])
     addr.sin_family = AF_INET;
     addr.sin_port = htons(port);
     inet_aton(adr, &addr.sin_addr);
-    //addr.sin_addr.s_addr = htonl(adr);
     bind(sd, (struct sockaddr *)&addr, sizeof(addr));
-
     listen(sd, SOMAXCONN);
-    //settings = 0;
-   // settings.on_url = my_url_callback;
-    //http_request_t* http_request = malloc(sizeof(http_request_t));
-
-  //  settings.on_header_field = my_header_field_callback;
-	/* ... */
-
-//	parser = malloc(sizeof(http_parser));
-//	http_parser_init(parser, HTTP_REQUEST);
-//	 nparsed = http_parser_execute(parser, &settings, buf, recved);
-
-
- //   parser->data = sd;
     struct ev_io w_accept;
     ev_io_init(&w_accept, accept_cb, sd, EV_READ);
     ev_io_start(loop, &w_accept);
