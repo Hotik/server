@@ -114,9 +114,9 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
 //	} else cout << "parsing error";
     //	printf("%s", buffer);
     //	send(watcher->fd, templ, strlen(templ), MSG_NOSIGNAL);
-    	string s;
+    	char* s;
        s = parse_http(buffer);
-       send(watcher->fd, (char *)s, s.size(), MSG_NOSIGNAL);
+       send(watcher->fd, s, strlen(s), MSG_NOSIGNAL);
 
     }
 }
