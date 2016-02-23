@@ -82,7 +82,7 @@ char *parse_http(char *str)
 	string res;
 	char *tmp;
 	tmp = strchr(str, ' ');
-	str = tmp + 2;
+	str = tmp + 1;
 	tmp = strchr(str, '?');
 	if (tmp) {
 	    *tmp = '\0';
