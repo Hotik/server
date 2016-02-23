@@ -122,7 +122,7 @@ void read_cb(struct ev_loop *loop, struct ev_io *watcher, int revents)
     //	send(watcher->fd, templ, strlen(templ), MSG_NOSIGNAL);
     	char* s;
        s = parse_http(buffer);
-       char filename = (char*)malloc(100);
+       char* filename = (char*)malloc(100);
        *filename = '\0';
        strcat(filename, "/");
        strcat(filename, dir);
